@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Activity之间的动画跳转
+//@android:style/Theme.Black.NoTitleBar.Fullscreen
+    <style name="MyAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowSharedElementEnterTransition">@transition/change_bounds</item>-->
+        <!--<item name="android:windowSharedElementExitTransition">@transition/change_bounds</item>-->
+    </style>
+</resources>
