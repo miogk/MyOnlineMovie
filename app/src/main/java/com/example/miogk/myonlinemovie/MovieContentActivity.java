@@ -43,8 +43,6 @@ import com.example.miogk.myonlinemovie.domain.HotMovieContent;
 import com.example.miogk.myonlinemovie.utilssssss.ConstantUtils;
 import com.example.miogk.myonlinemovie.utilssssss.MyUtils;
 
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,6 +165,7 @@ public class MovieContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_content2);
         ButterKnife.bind(this);
+        //全屏切换高度不一致修复
         initStatusBar(R.color.white);
         //利用反射修改ViewPager自动滑动速度
 //        fixedSpeedOfViewPager(viewPager);
@@ -486,6 +485,8 @@ public class MovieContentActivity extends AppCompatActivity {
         });
     }
 
+
+    //更多预告片,花絮视频
     private void getTrailersClips(HotMovieContent o) {
         final ArrayList<HotMovieContent.Trailers> trailers = o.trailers;
         ArrayList<HotMovieContent.Bloopers> bloopers = o.bloopers;
@@ -756,6 +757,16 @@ public class MovieContentActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
             final HotMovieContent.Trailers t = trailers.get(i);
+            final String path = t.resource_url;
+            myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+                    Intent intent = new Intent(activity, PLTextureViewBilibili.class);
+                    intent.putExtra("path", path);
+                    ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+                }
+            });
             Glide.with(activity).load(t.medium).into(myViewHolder.imageView);
         }
 
