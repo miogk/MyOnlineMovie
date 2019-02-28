@@ -7,9 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -42,6 +44,12 @@ public class AllCommentsActivity extends AppCompatActivity {
     private String count = "20";
     @BindView(R.id.progress_bar_layout)
     ViewGroup progress_bar_layout;
+    @BindView(R.id.all_comments_movie_title)
+    TextView all_comments_movie_title;
+    @BindView(R.id.all_comments_tool_bar)
+    Toolbar toolbar;
+    @BindView(R.id.all_comments_back)
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +63,18 @@ public class AllCommentsActivity extends AppCompatActivity {
         if (getActionBar() != null) {
             getActionBar().hide();
         }
+        setSupportActionBar(toolbar);
         Intent intent = getIntent();
         movieId = intent.getStringExtra("movieId");
+        String movieTitle = intent.getStringExtra("movieTitle");
+        all_comments_movie_title.setText(movieTitle + "的短评");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                supportFinishAfterTransition();
+                finish();
+            }
+        });
         getDataFromNet();
     }
 

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mcgl="http://schemas.android.com/apk/com.example.miogk.myonlinemovie.customView"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SearchActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_search_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:background="@color/pink"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingStart="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:title=""
+        app:titleMarginStart="0dp"
+        app:titleMargins="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="@dimen/complete_auto_text_view_left_right_padding_margin"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/auto_complete_text_view_back_ground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+                    android:src="@drawable/search"/>
+
+                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                    android:background="@null"
+                    android:id="@+id/app_compat_auto_complete_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+                    android:completionThreshold="1"
+                    android:focusedByDefault="true"
+                    android:hint="请输入电影名字"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/activity_search_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/complete_auto_text_view_left_right_padding_margin"
+                    android:text="取消"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+        android:paddingTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+        android:paddingBottom="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+        android:text="大家都在搜"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/yellow"/>
+
+
+    <com.example.miogk.myonlinemovie.customView.MyCustomGridLayout
+        android:padding="0dp"
+        android:layout_margin="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/auto_complete_text_view_style"
+            android:text="流浪地球"/>
+
+        <TextView
+            style="@style/auto_complete_text_view_style"
+            android:text="改革春风吹满地"/>
+
+        <TextView
+            style="@style/auto_complete_text_view_style"
+            android:text="老番茄"/>
+
+        <TextView
+            style="@style/auto_complete_text_view_style"
+            android:text="EXO"/>
+
+        <TextView
+            style="@style/auto_complete_text_view_style"
+            android:text="奈何BOSS要娶我"/>
+    </com.example.miogk.myonlinemovie.customView.MyCustomGridLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_search_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

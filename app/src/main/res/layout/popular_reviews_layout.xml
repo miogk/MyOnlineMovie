@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,12 +17,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/popular_reviews_image_view"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/p2541662397"/>
+                android:src="@drawable/p2541662397"
+                circleimageview:civ_border_color="@color/yellow"
+                circleimageview:civ_border_overlay="false"
+                circleimageview:civ_border_width="2dp"
+                circleimageview:civ_circle_background_color="#000000"/>
         </LinearLayout>
 
         <LinearLayout
@@ -71,8 +76,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:ellipsize="end"
-            android:maxLines="1"
             android:textColor="@color/blue"
             android:textSize="16sp"/>
     </LinearLayout>
@@ -81,13 +84,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
-
         <TextView
             android:id="@+id/popular_reviews_summary"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:lineSpacingMultiplier="@dimen/lineSpacingMultiplier"
+            android:padding="@dimen/text_padding"
+            android:background="@color/text_view_background_color"
             android:textSize="16sp"/>
     </LinearLayout>
 
@@ -101,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:text="有用"
+            android:text="@string/useful"
             android:textColor="@color/blue"/>
 
         <TextView
@@ -114,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:text="没用"
+            android:text="@string/useless"
             android:textColor="@color/blue"/>
 
         <TextView

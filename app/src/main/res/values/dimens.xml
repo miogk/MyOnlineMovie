@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="image_view_width">230dp</dimen>
+    <dimen name="image_view_height">160dp</dimen>
+    <dimen name="text_padding">10dp</dimen>
+    <dimen name="guide_text_size">20sp</dimen>
+    <dimen name="lineSpacingMultiplier">1.2</dimen>
+    <dimen name="complete_auto_text_view_left_right_padding_margin">10dp</dimen>
+    <dimen name="complete_auto_text_view_top_bottom_padding_margin">10dp</dimen>
+    <dimen name="collapsing_tool_bar_height">350dp</dimen>
+    <dimen name="tool_bar_height">100dp</dimen>
+</resources>

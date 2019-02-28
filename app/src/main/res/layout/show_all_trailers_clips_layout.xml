@@ -1,52 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginLeft="15dp"
-              android:layout_marginRight="15dp"
+              android:fitsSystemWindows="true"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/show_all_trailers_clips_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="大黄蜂视频"
-        android:textSize="30sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="预告片"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/show_all_trailers_clips_recycler_view_1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="片段"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/show_all_trailers_clips_recycler_view_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/show_all_bloopers_trailers_clips_tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:title="">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="花絮"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/show_all_trailers_clips_recycler_view_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"/>
+                    <ImageButton
+                        android:id="@+id/show_all_bloopers_trailers_clips_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:src="@drawable/back"/>
+
+                    <TextView
+                        android:id="@+id/show_all_trailers_clips_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:hint="大黄蜂视频"
+                        android:textColor="#000000"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+
+            //预告片
+
+            <LinearLayout
+                android:id="@+id/show_all_trailers_recycler_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/new_year"
+                    android:drawablePadding="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="预告片"
+                    android:textColor="@color/guide_text_color"
+                    android:textSize="@dimen/guide_text_size"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/show_all_trailers_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+            </LinearLayout>
+
+            //片段
+
+            <LinearLayout
+                android:id="@+id/show_all_clips_recycler_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableStart="@drawable/new_year"
+                    android:drawablePadding="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="片段"
+                    android:textColor="@color/guide_text_color"
+                    android:textSize="@dimen/guide_text_size"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/show_all_clips_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+            </LinearLayout>
+
+            //花絮
+
+            <LinearLayout
+                android:id="@+id/show_all_bloopers_recycler_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:drawableStart="@drawable/new_year"
+                    android:drawablePadding="5dp"
+                    android:paddingLeft="15dp"
+                    android:text="花絮"
+                    android:textColor="@color/guide_text_color"
+                    android:textSize="@dimen/guide_text_size"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/show_all_bloopers_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

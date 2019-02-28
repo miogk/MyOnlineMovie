@@ -87,7 +87,7 @@ public class HotMovieContent implements Serializable {
     }
 
     //片段
-    public class Clips {
+    public class Clips implements Serializable {
         public String medium;
         public String title;
         public String resource_url;
@@ -95,14 +95,14 @@ public class HotMovieContent implements Serializable {
 
 
     //花絮
-    public class Bloopers {
+    public class Bloopers implements Serializable {
         public String medium;
         public String title;
         public String resource_url;
     }
 
     //预告片
-    public class Trailers {
+    public class Trailers implements Serializable {
         public String medium;
         public String title;
         public String resource_url;
@@ -118,6 +118,8 @@ public class HotMovieContent implements Serializable {
 
         public class Avatar implements Serializable {
             public String small;
+            public String medium;
+            public String large;
         }
     }
 

@@ -8,36 +8,51 @@
         <item>广州</item>
         <item>成都</item>
     </string-array>
-    <string name="test">as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-别人微博的 网址 http://blog.csdn.net/u013835855/article/details/71159888a</string>
-    <string name="test2">目前滑动指示器最著名的是JakeWarton的ViewpagerIndicator，用别人的东西固然方便，但是也带来很多使用
-上的疑惑，这篇博客，我们使用HorizontalScrollView自己写一个viewPager指示器。
-这里首先说一下很多自己写的indicator只限于可视范围内不能移动的指示器，所以tab的数量有限，一般最多五个就已经很拥挤了，可是我们发现开源的ViewpagerIndicator有一个很棒的效果
-就是不用限定tab的个数，并且当前选中的tab将处于中间位置（两边不可滑动范围除外），这一点我便想到了利用HorizontalScrollView来实现这个效果。而tab的显示我使用TextView
-就行动态加载，然后把tab放到HorizontalScrollView中，在这里注意一个问题，那就是HorizontalScrollView本身的子view个数是有限定的，只能是一个，这一点跟scrollview一样，
-用限定tab的个数，并且当前选中的tab将处于中间位置（两边不可滑动范围除外），这一点我便想到了利用HorizontalScrollView来实现这个效果。而tab的显示我使用TextView就行动
-态加载，然后把tab放到HorizontalScrollView中，在这里注意一个问题，那就是HorizontalScrollView本身的子view个数是有限定的，只能是一个，这一点跟scrollview一样，源码是这样的a4d65sa
-</string>
-    <string name="test3">as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65sa
-as4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65saas4d564sad4asd54sa4d65s</string>
 
+    <string name="my_custom_behavior">com.example.miogk.myonlinemovie.customView.MyCustomBehavior</string>
     <string name="title_activity_show_cinema">ShowCinemaActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="useful">赞同</string>
+    <string name="useless">反对</string>
+    <string name="search">搜索</string>
+    <string name="beigexing">《悲歌行》
+
+        唐代：李白
+
+        悲来乎，悲来乎。
+
+        主人有酒且莫斟，听我一曲悲来吟。
+
+        悲来不吟还不笑，天下无人知我心。
+
+        君有数斗酒，我有三尺琴。
+
+        琴鸣酒乐两相得，一杯不啻千钧金。
+
+        悲来乎，悲来乎。
+
+        天虽长，地虽久，金玉满堂应不守。
+
+        富贵百年能几何，死生一度人皆有。
+
+        孤猿坐啼坟上月，且须一尽杯中酒。
+
+        悲来乎，悲来乎。
+
+        凤凰不至河无图，微子去之箕子奴。
+
+        汉帝不忆李将军，楚王放却屈大夫。
+
+        悲来乎，悲来乎。
+
+        秦家李斯早追悔，虚名拨向身之外。
+
+        范子何曾爱五湖，功成名遂身自退。
+
+        剑是一夫用，书能知姓名。
+
+        惠施不肯干万乘，卜式未必穷一经。
+
+        还须黑头取方伯，莫谩白首为儒生。</string>
 </resources>

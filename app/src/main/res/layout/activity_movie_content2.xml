@@ -22,7 +22,7 @@
                 android:id="@+id/collapsing_layout"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:background="#FFFFFF"
+                android:background="@color/pink"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <android.support.v7.widget.Toolbar
@@ -86,12 +86,17 @@
                             <android.support.design.widget.TabItem
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="影评"/>
+                                android:text="演职人员"/>
 
                             <android.support.design.widget.TabItem
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="花絮"/>
+                                android:text="短评"/>
+
+                            <android.support.design.widget.TabItem
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="影评"/>
                         </android.support.design.widget.TabLayout>
                     </LinearLayout>
                 </android.support.v7.widget.Toolbar>
@@ -131,7 +136,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#1565c0">
+                android:background="@color/pink">
                 //图片上半部分内容
 
                 <RelativeLayout
@@ -238,7 +243,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="15dp"
-                            android:baselineAligned="false"
                             android:orientation="horizontal">
                             //第一排左边的内容
 
@@ -292,11 +296,13 @@
                             android:orientation="vertical">
 
                             <RadioGroup
+                                android:id="@+id/radio_group"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal">
 
                                 <RadioButton
+                                    android:id="@+id/want_to_see"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -313,6 +319,7 @@
                                     android:textColor="@drawable/radio_button_text_color_selector"/>
 
                                 <RadioButton
+                                    android:id="@+id/have_seen"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center"
@@ -362,13 +369,15 @@
                                 android:layout_marginLeft="15dp"
                                 android:layout_marginTop="15dp"
                                 android:layout_marginRight="15dp"
-                                android:textSize="20sp"/>
+                                android:background="@color/text_view_background_color"
+                                android:lineSpacingMultiplier="1.2"
+                                android:padding="@dimen/text_padding"
+                                android:textSize="18sp"/>
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginTop="15dp"
-                                android:layout_marginBottom="20dp"
                                 android:background="@color/divider"/>
                         </LinearLayout>
 
@@ -376,15 +385,16 @@
                         //演职人员
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:id="@+id/yanzhi_renyuan"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="15dp"
+                                android:layout_marginTop="15dp"
                                 android:layout_marginRight="15dp"
                                 android:drawableLeft="@drawable/new_year"
                                 android:drawablePadding="3dp"
@@ -394,11 +404,12 @@
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/director_actor_recycler_view"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
                                 android:layout_marginTop="15dp"
-                                android:layout_marginRight="15dp">
+                                android:clipToPadding="false"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp">
                             </android.support.v7.widget.RecyclerView>
 
                             <View
@@ -412,7 +423,7 @@
 
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
@@ -429,11 +440,12 @@
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/recycler_view_pictures"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
                                 android:layout_marginTop="15dp"
-                                android:layout_marginRight="15dp">
+                                android:clipToPadding="false"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp">
                             </android.support.v7.widget.RecyclerView>
 
                             <TextView
@@ -455,7 +467,7 @@
                         //预告片
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
@@ -473,11 +485,12 @@
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/recycler_view_trailers_clips"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
                                 android:layout_marginTop="15dp"
-                                android:layout_marginRight="15dp">
+                                android:clipToPadding="false"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp">
                             </android.support.v7.widget.RecyclerView>
 
                             <TextView
@@ -500,7 +513,8 @@
                         //短评
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:id="@+id/duanping"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
@@ -518,14 +532,14 @@
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/popular_comments_recycler_view"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp">
                             </android.support.v7.widget.RecyclerView>
 
                             <TextView
                                 android:id="@+id/total_comments_count"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="center"
@@ -542,7 +556,8 @@
                         //长篇影评
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:id="@+id/yingping"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
@@ -560,18 +575,18 @@
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/popular_reviews_recycler_view"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp">
                             </android.support.v7.widget.RecyclerView>
 
                             <TextView
                                 android:id="@+id/total_reviews_count"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="121321"
                                 android:gravity="center"
+                                android:text="121321"
                                 android:textColor="@color/blue"
                                 android:textSize="20sp"/>
 
@@ -580,10 +595,33 @@
                                 android:layout_height="1dp"
                                 android:layout_marginTop="15dp"
                                 android:background="@color/divider"/>
+
+                            <Button
+                                android:id="@+id/buy_ticket_button"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/buy_ticket_background_color"
+                                android:text="购票选座"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:visibility="gone"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
         </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right|end"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="#FFFFFF"
+            android:src="@mipmap/top"
+            android:visibility="gone"
+            app:borderWidth="0dp"
+            app:fabSize="mini"/>
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

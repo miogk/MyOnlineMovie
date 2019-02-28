@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".CinemaResultActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="11dp">
+
+        <LinearLayout
+            android:id="@+id/cinema_result_search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+            android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+            android:layout_marginRight="@dimen/complete_auto_text_view_left_right_padding_margin"
+            android:layout_marginBottom="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+            android:background="#FFFFFF"
+            android:elevation="11dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:src="@drawable/search"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/cinema_result_key_word"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="关键字搜索"
+                android:padding="0dp"/>
+
+            <Button
+                android:id="@+id/cinema_result_search"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:elevation="20dp"
+                android:gravity="center"
+                android:text="搜索"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cinema_result_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/cinema_result_search_layout">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/cinema_result_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.amap.api.maps.MapView>
+</FrameLayout>

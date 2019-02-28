@@ -4,7 +4,10 @@ import com.example.miogk.myonlinemovie.domain.AllComments;
 import com.example.miogk.myonlinemovie.domain.AllReviews;
 import com.example.miogk.myonlinemovie.domain.HotMovie;
 import com.example.miogk.myonlinemovie.domain.HotMovieContent;
+import com.example.miogk.myonlinemovie.domain.PersonalInformation;
 import com.example.miogk.myonlinemovie.domain.ShowPhotos;
+import com.example.miogk.myonlinemovie.domain.SingleReview;
+import com.example.miogk.myonlinemovie.domain.TheResultOfSearchMovies;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -48,4 +51,13 @@ public interface ApiService {
 
     @GET("v2/movie/subject/{movieId}/reviews")
     Observable<AllReviews> getAllReviews(@Path("movieId") String movieId, @Query("start") String start, @Query("count") String count);
+
+    @GET("v2/movie/review/{reviewId}")
+    Observable<SingleReview> getSingleReview(@Path("reviewId") String reviewId);
+
+    @GET("v2/movie/search")
+    Observable<TheResultOfSearchMovies> getTheResultOfSearchMovies(@Query("q") String q);
+
+    @GET("v2/movie/celebrity/{id}")
+    Observable<PersonalInformation> getPeronalInformation(@Path("id") String id);
 }

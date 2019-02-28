@@ -66,7 +66,7 @@ public class B extends Fragment {
     private int start = 0;
     private int count = EVERY_PAGE_COUNT;
     private int total;
-    private String city = "上海";
+    private static String city = "上海";
 
     private boolean firstTime = true;
     private boolean isFirstTime = true;
@@ -91,11 +91,9 @@ public class B extends Fragment {
         return view;
     }
 
-    public static B newInstance() {
-        if (b == null) {
-            return new B();
-        }
-        return b;
+    public static B newInstance(String ccity) {
+        city = ccity;
+        return new B();
     }
 
     @Override

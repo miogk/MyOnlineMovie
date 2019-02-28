@@ -3,6 +3,7 @@ package com.example.miogk.myonlinemovie.fragment;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.miogk.myonlinemovie.FullScreenPhotoActivity;
 import com.example.miogk.myonlinemovie.MovieContentActivity;
 import com.example.miogk.myonlinemovie.R;
+import com.example.miogk.myonlinemovie.ShowCinema3Activity;
 import com.example.miogk.myonlinemovie.ShowCinemaActivity;
 import com.example.miogk.myonlinemovie.domain.HotMovie;
 import com.example.miogk.myonlinemovie.utilssssss.ConstantUtils;
@@ -66,8 +68,7 @@ public class A extends Fragment {
     private int start = 0;
     private int count = EVERY_PAGE_COUNT;
     private int total;
-    private String city = "上海";
-
+    private static String city = "上海";
     private boolean firstTime = true;
     private boolean isFirstTime = true;
     private MyAdapter myAdapter;
@@ -78,6 +79,10 @@ public class A extends Fragment {
     private final int num_of_load = 1;
     @BindView(R.id.progress_bar_layout)
     ViewGroup progress_bar_layout;
+    @BindView(R.id.loading_progress_loading_anim)
+    ViewGroup loading_progress_loading_anim;
+    @BindView(R.id.loading_progress_try_again)
+    ViewGroup loading_progress_try_again;
 
     @SuppressLint("CheckResult")
     @Nullable
@@ -94,17 +99,15 @@ public class A extends Fragment {
         return view;
     }
 
-    public static A newInstance() {
-        if (a == null) {
-            return new A();
-        }
-        return a;
+
+    public static A newInstance(String ccity) {
+        city = ccity;
+        return new A();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser && isFirst) {
-
             junitText2(start, EVERY_PAGE_COUNT, null);
             isFirst = false;
         }
@@ -197,6 +200,16 @@ public class A extends Fragment {
                             refreshLayout.finishLoadMore(false);
                         }
                         Log.e(TAG, "onError: " + e);
+                        loading_progress_try_again.setVisibility(View.VISIBLE);
+                        loading_progress_loading_anim.setVisibility(View.GONE);
+                        loading_progress_try_again.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loading_progress_try_again.setVisibility(View.GONE);
+                                loading_progress_loading_anim.setVisibility(View.VISIBLE);
+                                junitText2(start, EVERY_PAGE_COUNT, null);
+                            }
+                        });
                     }
 
                     @Override
@@ -208,6 +221,7 @@ public class A extends Fragment {
                         }
                         if (progress_bar_layout != null) {
                             progress_bar_layout.setVisibility(View.GONE);
+                            loading_progress_try_again.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -260,7 +274,15 @@ public class A extends Fragment {
             myViewHolder.buy_ticket.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ShowCinemaActivity.class);
+//                    Intent intent = new Intent(getActivity(), ShowCinemaActivity.class);
+//                    startActivity(intent);
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+////将功能Scheme以URI的方式传入data
+                    Uri uri = Uri.parse("androidamap://arroundpoi?sourceApplication=softname&keywords=电影院&dev=0");
+                    intent.setData(uri);
+////启动该页面即可
                     startActivity(intent);
                 }
             });

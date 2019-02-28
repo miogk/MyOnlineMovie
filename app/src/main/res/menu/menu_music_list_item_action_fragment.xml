@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="下一首歌"/>
+    <item android:title="添加到歌单"/>
+    <item android:title="添加到播放列表"/>
+    <item android:title="歌曲详情"/>
+</menu>

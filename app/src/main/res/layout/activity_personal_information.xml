@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".PersonalInformationActivity">
+
+    <include layout="@layout/loading_progress_bar" android:visibility="gone"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/personal_appbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/personal_collapsing"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/collapsing_tool_bar_height"
+                app:contentScrim="@color/white"
+                app:layout_scrollFlags="scroll">
+
+                <ImageView
+                    android:id="@+id/personal_collapsing_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/yihua2"/>
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <LinearLayout
+                android:id="@+id/personal_inflate_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                app:layout_scrollFlags="scroll">
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/personal_tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/white"
+                android:minHeight="?attr/actionBarSize"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp">
+
+                <ImageButton
+                    android:id="@+id/personal_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+                    android:background="@null"
+                    android:src="@drawable/back"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/complete_auto_text_view_left_right_padding_margin"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/personal_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="吴京"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:id="@+id/personal_professions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="wujing"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/personal_birthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/complete_auto_text_view_left_right_padding_margin"
+                            android:gravity="center"
+                            android:text="1974-04-03"/>
+
+                        <TextView
+                            android:id="@+id/personal_born_place"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/complete_auto_text_view_left_right_padding_margin"
+                            android:gravity="center"
+                            android:text="中国,北京"/>
+
+                        <TextView
+                            android:id="@+id/personal_constellation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="白羊座"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/personal_circle_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="-200dp"
+            android:elevation="11dp"
+            android:src="@mipmap/yihua"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/personal_nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/complete_auto_text_view_left_right_padding_margin">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/new_year"
+                        android:text="简介"
+                        android:textSize="@dimen/guide_text_size"/>
+
+                    <TextView
+                        android:id="@+id/personal_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                        android:lineSpacingMultiplier="@dimen/lineSpacingMultiplier"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/new_year"
+                        android:paddingLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+                        android:text="剧照"
+                        android:textSize="@dimen/guide_text_size"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/personal_photos_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                        android:clipToPadding="false"
+                        android:paddingLeft="@dimen/complete_auto_text_view_left_right_padding_margin">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                        android:background="@color/divider"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/new_year"
+                        android:paddingLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+                        android:text="作品"
+                        android:textSize="@dimen/guide_text_size"/>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/personal_works_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+                        android:clipToPadding="false">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+        <!--android:id="@+id/personal_circle_image_view"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:elevation="11dp"-->
+        <!--android:src="@mipmap/yihua"-->
+        <!--app:layout_behavior="@string/my_custom_behavior"/>-->
+
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

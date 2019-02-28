@@ -17,6 +17,7 @@ public class AllReviews {
         public String content;
         public String useless_count;
         public String comments_count;
+        public String id;
 
 
         public class Author {

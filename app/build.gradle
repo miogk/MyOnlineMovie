@@ -1,4 +1,35 @@
 apply plugin: 'com.android.application'
+// 添加插件
+apply plugin: 'com.mob.sdk'
+
+// 在MobSDK的扩展中注册PaySDK的相关信息
+MobSDK {
+    appKey "24c42ad13bd0e"
+    appSecret "cbbb8ef18e64c692488aa41dead3e637"
+
+    SMSSDK {}
+
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey "24c42ad13bd0e"
+                appSecret "cbbb8ef18e64c692488aa41dead3e637"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "com.example.miogk.myonlinemovie"
+                appSecret "cbbb8ef18e64c692488aa41dead3e637"
+            }
+            QQ {
+                appId "com.example.miogk.myonlinemovie"
+                appKey "cbbb8ef18e64c692488aa41dead3e637"
+                shareByAppClient true
+            }
+        }
+    }
+}
 
 android {
     compileSdkVersion 28
@@ -9,7 +40,22 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId "com.example.miogk.myonlinemovie" //JPush 上注册的包名.
+
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "f50a1bc389268049d4cff33e", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -45,4 +91,19 @@ dependencies {
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation files('libs/pldroid-player-2.1.6.jar')
+    implementation files('libs/Msc.jar')
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'cn.jiguang.sdk:jpush:3.1.6'
+    // 此处以JPush 3.1.6 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:1.2.5'
+    // 此处以JCore 1.2.5 版本为例。
+    //    //高德地图搜索功能
+    //    implementation 'com.amap.api:search:latest.integration'
+    //    //3D地图so及jar
+    //    implementation 'com.amap.api:3dmap:latest.integration'
+    //    //定位功能
+    //    implementation 'com.amap.api:location:latest.integration'
+    implementation files('libs/Android_Map3D_SDK_V6.7.0_20190213.jar')
+    implementation files('libs/AMap_Location_V4.5.0_20190121.jar')
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

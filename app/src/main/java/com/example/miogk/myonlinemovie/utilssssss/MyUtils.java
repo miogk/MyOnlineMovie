@@ -3,15 +3,23 @@ package com.example.miogk.myonlinemovie.utilssssss;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.amap.api.location.AMapLocationClient;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -36,8 +44,6 @@ public class MyUtils {
     private static Calendar calendar = Calendar.getInstance();
     private static final String TAG = "MyUtils";
 
-
-
     public static void Toast(Context context, String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
@@ -48,11 +54,17 @@ public class MyUtils {
         return result;
     }
 
-    public static void putInSharedPreferences(Context context, String key, String value) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("constellationJson", Context.MODE_PRIVATE);
+    public static void putInSharedPreferences(Context context, String name, String key, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.apply();
+    }
+
+    public static void getAllPermissions(Activity activity, String permission) {
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{permission}, 1);
+        }
     }
 
     /**
@@ -195,5 +207,30 @@ public class MyUtils {
             sb.append(hex);
         }
         return sb.toString();
+    }
+
+    /**
+     * 状态栏处理：解决全屏切换非全屏页面被压缩问题
+     */
+    public static void initStatusBar(int barColor, Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            // 获取状态栏高度
+            int statusBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
+            View rectView = new View(activity);
+            // 绘制一个和状态栏一样高的矩形，并添加到视图中
+            LinearLayout.LayoutParams params
+                    = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
+            rectView.setLayoutParams(params);
+            //设置状态栏颜色
+            rectView.setBackgroundColor(activity.getResources().getColor(barColor));
+            // 添加矩形View到布局中
+            ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+            decorView.addView(rectView);
+            ViewGroup rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            rootView.setFitsSystemWindows(true);
+            rootView.setClipToPadding(true);
+        }
     }
 }

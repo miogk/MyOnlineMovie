@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mbv="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/setting_login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp">
+
+        <TextView
+            android:id="@+id/setting_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/divider"
+            android:gravity="center"
+            android:text="请先登录"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setting_have_login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/divider"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/setting_have_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/divider"
+            android:gravity="center"
+            android:text="username"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/want_to_see"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/divider"
+            android:gravity="center"
+            android:text="想看的电影"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/have_seen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/divider"
+            android:gravity="center"
+            android:text="看过的电影"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setting_login_out_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/setting_login_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:text="登出"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/yihua"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/yihua"/>
+
+        <ImageView
+            android:id="@+id/music_imageview"
+            style="@style/Widget.AppCompat.ActionButton.Overflow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|right"/>
+    </LinearLayout>
+</LinearLayout>

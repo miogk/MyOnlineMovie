@@ -11,10 +11,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.miogk.myonlinemovie.domain.ShowPhotos;
@@ -43,6 +46,12 @@ public class ShowPhotosActivity extends AppCompatActivity {
     @BindView(R.id.progress_bar_layout)
     ViewGroup progress_bar_layout;
     Activity activity = this;
+    @BindView(R.id.show_photos_tool_bar)
+    Toolbar toolbar;
+    @BindView(R.id.show_photos_movie_title)
+    TextView show_photos_movie_title;
+    @BindView(R.id.show_photos_back)
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +66,19 @@ public class ShowPhotosActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
+        setSupportActionBar(toolbar);
         //获取Intent传来的数据
         Intent intent = getIntent();
+        String movieTitle = intent.getStringExtra("movieTitle");
         String movieId = intent.getStringExtra("movieId");
         photo_count = intent.getStringExtra("photo_count");
+        show_photos_movie_title.setText(movieTitle + "的剧照");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         showPhotos(movieId);
     }
 

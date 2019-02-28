@@ -1,9 +1,18 @@
 package com.example.miogk.myonlinemovie;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Movie;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -23,15 +33,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -40,12 +59,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.miogk.myonlinemovie.customView.MyCustomView;
 import com.example.miogk.myonlinemovie.domain.AllReviews;
 import com.example.miogk.myonlinemovie.domain.HotMovieContent;
+import com.example.miogk.myonlinemovie.domain.PersonalInformation;
 import com.example.miogk.myonlinemovie.utilssssss.ConstantUtils;
+import com.example.miogk.myonlinemovie.utilssssss.MySqliteDatabaseHelper;
 import com.example.miogk.myonlinemovie.utilssssss.MyUtils;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
@@ -55,6 +78,7 @@ import java.util.TreeSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -69,6 +93,7 @@ import service.ApiService;
  *
  */
 public class MovieContentActivity extends AppCompatActivity {
+    private Activity activity = this;
     private static final String TAG = "MovieContentActivity";
     private Retrofit retrofit;
     @BindView(R.id.coordinator_layout)
@@ -128,7 +153,6 @@ public class MovieContentActivity extends AppCompatActivity {
     @BindView(R.id.total_trailers_clips)
     TextView total_trailers_clips;
     int currentPosition = 1;
-    Activity activity = this;
     @BindView(R.id.popular_comments_recycler_view)
     RecyclerView popular_comments_recycler_view;
     //总短评数
@@ -138,7 +162,27 @@ public class MovieContentActivity extends AppCompatActivity {
     RecyclerView popular_reviews_recycler_view;
     @BindView(R.id.total_reviews_count)
     TextView total_reviews_count;
-
+    private String movieTitle;
+    @BindView(R.id.yanzhi_renyuan)
+    View yanzhi_renyuan;
+    @BindView(R.id.duanping)
+    View duanping;
+    @BindView(R.id.yingping)
+    View yingping;
+    @BindView(R.id.loading_progress_loading_anim)
+    ViewGroup loading_progress_loading_anim;
+    @BindView(R.id.loading_progress_try_again)
+    ViewGroup loading_progress_try_again;
+    @BindView(R.id.buy_ticket_button)
+    Button buy_ticket_button;
+    @BindView(R.id.floating_action_button)
+    FloatingActionButton floating_action_button;
+    @BindView(R.id.want_to_see)
+    RadioButton want_to_see;
+    @BindView(R.id.have_seen)
+    RadioButton have_seen;
+    @BindView(R.id.radio_group)
+    RadioGroup radio_group;
     //    private String url = "https://movie.douban.com/subject/26394152/mobile";
     private ArrayList images = new ArrayList(Arrays.asList(R.drawable.p2541662397, R.drawable.p2541662397, R.drawable.p2541662397));
     private ArrayList<String> photos = new ArrayList<>();
@@ -148,8 +192,8 @@ public class MovieContentActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                //每隔5秒自动滑动
-//                timer.schedule(timerTask, 1000, 5000);
+                //每隔10秒自动滑动
+//                timer.schedule(timerTask, 10000, 10000);
             }
         }
     };
@@ -157,22 +201,219 @@ public class MovieContentActivity extends AppCompatActivity {
     Timer timer = new Timer();
     private String movieImageUrl;
     private String movieImageUrl1;
+    private MySqliteDatabaseHelper mSqliteDatabaseHelper;
+    private SQLiteDatabase mDatabase;
+    private SharedPreferences mSharedPreferences;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void getWantToSeeOrHaveSeen(String username) {
+        String sql = "select want_to_see, have_seen from user where username = ?";
+        Cursor cursor = mDatabase.rawQuery(sql, new String[]{username});
+        if (cursor.moveToFirst()) {
+            //是否有保存过这部电影的want_to_see
+            String wts = cursor.getString(cursor.getColumnIndex("want_to_see"));
+            if (!TextUtils.isEmpty(wts)) {
+                if (wts.contains(movieId)) {
+                    want_to_see.setChecked(true);
+                    want_to_see.setClickable(false);
+                }
+            }
+            String hs = cursor.getString(cursor.getColumnIndex("have_seen"));
+            if (!TextUtils.isEmpty(hs)) {
+                //是否有保存过这部电影的
+                if (hs.contains(movieId)) {
+                    have_seen.setChecked(true);
+                    have_seen.setClickable(false);
+                }
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_content2);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        movieId = intent.getStringExtra("movieId");
+        Log.e(TAG, "onCreate:   " + movieId);
+        movieImageUrl1 = intent.getStringExtra("movieImageUrl");
+        Log.e(TAG, "onCreate: " + getPackageResourcePath());
+        mSqliteDatabaseHelper = new MySqliteDatabaseHelper(this);
+        mDatabase = mSqliteDatabaseHelper.getReadableDatabase();
+        mSharedPreferences = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        final String username = mSharedPreferences.getString("username", "");
+        if (!TextUtils.isEmpty(username)) {
+            getWantToSeeOrHaveSeen(username);
+        }
         //全屏切换高度不一致修复
-        initStatusBar(R.color.white);
+        MyUtils.initStatusBar(R.color.white, this);
         //利用反射修改ViewPager自动滑动速度
 //        fixedSpeedOfViewPager(viewPager);
         MyUtils.statusBarBackgroundColor(getWindow(), this, R.color.white);
         //小米的官方黑色字体设置
         MyUtils.MIUISetStatusBarLightMode(this, true);
         MyUtils.statusBarLightModeInAndroid(this);
+        want_to_see.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //先判断是否登录
+                if (TextUtils.isEmpty(username)) {
+                    want_to_see.setChecked(false);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage("用户还未登录,请先登录");
+                    final AlertDialog dialog = builder.show();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(activity, LoginActivity.class);
+                            dialog.cancel();
+                            startActivity(intent);
+                        }
+                    }, 1500);
+                } else {
+                    //用户已登录,并且之前没有have_seen看过这影片.
+                    if (!have_seen.isChecked()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setMessage("您是想看" + movieTitle + "吗?");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ContentValues contentValues = new ContentValues();
+                                Cursor cursor = null;
+                                try {
+                                    cursor = mDatabase.rawQuery("select want_to_see, have_seen from user where username = ?", new String[]{username});
+                                    //查询之前有没有want_to_see或者_have_seen
+                                    if (cursor.moveToFirst()) {
+                                        String wts = cursor.getString(cursor.getColumnIndex("want_to_see"));
+                                        String hs = cursor.getString(cursor.getColumnIndex("have_seen"));
+                                        if (TextUtils.isEmpty(wts)) {
+                                            wts = movieId;
+                                        } else {
+                                            if (!wts.contains(movieId)) {
+                                                wts = wts + ":" + movieId;
+                                            }
+                                        }
+                                        contentValues.put("want_to_see", wts);
+                                        mDatabase.update("user", contentValues, "username = ?", new String[]{username});
+                                        //如果已经看过这影片，就用""替换,然后update.
+                                        if (hs.contains(movieId)) {
+                                            if (hs.contains(":" + movieId)) {
+                                                hs = hs.replace(":" + movieId, "");
+                                            } else {
+                                                hs = hs.replace(movieId, "");
+                                            }
+                                            contentValues.clear();
+                                            contentValues.put("have_seen", hs);
+                                            mDatabase.update("user", contentValues, "username = ?", new String[]{username});
+                                        }
+                                        want_to_see.setClickable(false);
+                                    } else {
+                                        Log.e(TAG, "onClick: want_to_see is null");
+                                    }
+                                } finally {
+                                    if (cursor != null) {
+                                        cursor.close();
+                                    }
+                                }
+                            }
+                        });
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                want_to_see.setChecked(false);
+                                dialog.cancel();
+                            }
+                        });
+                        builder.show();
+                    }
+                }
+            }
+        });
+        have_seen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //如果用户没有登录
+                if (TextUtils.isEmpty(username)) {
+                    have_seen.setChecked(false);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage("用户还未登录,请先登录");
+                    final AlertDialog dialog = builder.show();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(activity, LoginActivity.class);
+                            dialog.cancel();
+                            startActivity(intent);
+                        }
+                    }, 1500);
+                    //如果有登录
+                } else {
+                    if (have_seen.isChecked()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setMessage("您是已经看了" + movieTitle + "吗?");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ContentValues contentValues = new ContentValues();
+                                Cursor cursor = mDatabase.rawQuery("select want_to_see, have_seen from user where username = ?", new String[]{username});
+                                //有此column的话
+                                if (cursor.moveToNext()) {
+                                    String wts = cursor.getColumnName(cursor.getColumnIndex("want_to_see"));
+                                    String hs = cursor.getString(cursor.getColumnIndex("have_seen"));
+                                    if (TextUtils.isEmpty(hs)) {
+                                        hs = movieId;
+                                    } else {
+                                        hs = hs + ":" + movieId;
+                                    }
+                                    contentValues.put("have_seen", hs);
+                                    mDatabase.update("user", contentValues, "username = ?", new String[]{username});
+                                    have_seen.setClickable(false);
+                                    //如果之前看过have_seen这影片,判断是否是第一个movieId或不是第一个:movieId并用""替换,然后update.
+                                    if (wts.contains(movieId)) {
+                                        if (wts.contains(":" + movieId)) {
+                                            wts = wts.replace(":" + movieId, "");
+                                        } else {
+                                            wts = wts.replace(movieId, "");
+                                        }
+                                        contentValues.clear();
+                                        contentValues.put("want_to_see", wts);
+                                        mDatabase.update("user", contentValues, "username = ?", new String[]{username});
+                                    }
+                                } else {
+                                    Log.e(TAG, "onClick: have_seen is null");
+                                }
+                            }
+                        });
+                        builder.show();
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                have_seen.setChecked(false);
+                                dialog.cancel();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        buy_ticket_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+                Intent intent = new Intent(activity, ShowCinemaActivity.class);
+                intent.putExtra("movieTitle", movieTitle);
+                ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+            }
+        });
+        floating_action_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appBarLayout.setExpanded(true);
+                nestedScrollView.scrollTo(0, 0);
+            }
+        });
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -199,13 +440,20 @@ public class MovieContentActivity extends AppCompatActivity {
                         int position = (int) view.getTag();
                         switch (position) {
                             case 0:
-                                appBarLayout.setExpanded(true);
+                                appBarLayout.setExpanded(true, true);
+                                nestedScrollView.scrollTo(0, 0);
                                 break;
                             case 1:
-                                appBarLayout.setExpanded(false);
+                                appBarLayout.setExpanded(false, false);
+                                nestedScrollView.smoothScrollTo(0, (int) (yanzhi_renyuan.getY() + toolbar.getHeight() * 2 - 17));
                                 break;
                             case 2:
-                                appBarLayout.setExpanded(false);
+                                appBarLayout.setExpanded(false, false);
+                                nestedScrollView.smoothScrollTo(0, (int) (duanping.getY() + toolbar.getHeight() * 2 - 17));
+                                break;
+                            case 3:
+                                appBarLayout.setExpanded(false, false);
+                                nestedScrollView.smoothScrollTo(0, (int) (yingping.getY() + toolbar.getHeight() * 2 - 17));
                                 break;
                         }
                     }
@@ -217,12 +465,62 @@ public class MovieContentActivity extends AppCompatActivity {
             }
         }
 
+        //nestedScrollView滑动事件，对应tablayoutItem的selected
+        nestedScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                Log.e(TAG, "onScrollChange: " + oldScrollY + " --- " + scrollY + " -- " + (yingping.getY() + toolbar.getHeight() * 2));
+                if (scrollY < (yanzhi_renyuan.getY() + toolbar.getHeight() * 2 - 17)) {
+                    if (!tabLayout.getTabAt(0).isSelected()) {
+                        tabLayout.getTabAt(0).select();
+                    }
+                    if (floating_action_button.isOrWillBeShown()) {
+                        floating_action_button.hide();
+                    }
+                } else if ((yanzhi_renyuan.getY() + toolbar.getHeight() * 2 - 17) <= scrollY && scrollY < (duanping.getY() + toolbar.getHeight() * 2 - 17)) {
+                    if (!tabLayout.getTabAt(1).isSelected()) {
+                        tabLayout.getTabAt(1).select();
+                    }
+                    if (floating_action_button.isOrWillBeShown()) {
+                        floating_action_button.hide();
+                    }
+                } else if ((duanping.getY() + toolbar.getHeight() * 2 - 17) <= scrollY && scrollY < (yingping.getY() + toolbar.getHeight() * 2 - 17)) {
+                    if (!tabLayout.getTabAt(2).isSelected()) {
+                        tabLayout.getTabAt(2).select();
+                    }
+                    if (floating_action_button.isOrWillBeHidden()) {
+                        floating_action_button.show();
+                        //没有滑动的话3秒后自动消失
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                floating_action_button.hide();
+                            }
+                        }, 3000);
+                    }
+                } else {
+                    if (!tabLayout.getTabAt(3).isSelected()) {
+                        tabLayout.getTabAt(3).select();
+                    }
+                    if (floating_action_button.isOrWillBeHidden()) {
+                        floating_action_button.show();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                floating_action_button.hide();
+                            }
+                        }, 3000);
+                    }
+                }
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
+        //根据appBarLayout的偏移量来改变toolbar背景的透明度
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
@@ -231,41 +529,13 @@ public class MovieContentActivity extends AppCompatActivity {
                 } else {
                     toolbar.setVisibility(View.VISIBLE);
                 }
-                toolbar.setBackgroundColor(changeAlpha(Color.WHITE, Math.abs(i * 1.0f) / appBarLayout.getTotalScrollRange()));
+                toolbar.setBackgroundColor(changeAlpha(getResources().getColor(R.color.white), Math.abs(i * 1.0f) / appBarLayout.getTotalScrollRange()));
             }
         });
-        Intent intent = getIntent();
-        movieId = intent.getStringExtra("movieId");
-        movieImageUrl1 = intent.getStringExtra("movieImageUrl");
+
 //        Glide.with(this).load(movieImageUrl1).into(activity_movie_conten2_image_view);
         getDataFromNet(movieId);
     }
-
-    /**
-     * 状态栏处理：解决全屏切换非全屏页面被压缩问题
-     */
-    public void initStatusBar(int barColor) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            // 获取状态栏高度
-            int statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-            View rectView = new View(this);
-            // 绘制一个和状态栏一样高的矩形，并添加到视图中
-            LinearLayout.LayoutParams params
-                    = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
-            rectView.setLayoutParams(params);
-            //设置状态栏颜色
-            rectView.setBackgroundColor(getResources().getColor(barColor));
-            // 添加矩形View到布局中
-            ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
-            decorView.addView(rectView);
-            ViewGroup rootView = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-            rootView.setFitsSystemWindows(true);
-            rootView.setClipToPadding(true);
-        }
-    }
-
 
 //调节ViewPager滑动速度
     //    private void fixedSpeedOfViewPager(ViewPager viewPager) {
@@ -334,8 +604,9 @@ public class MovieContentActivity extends AppCompatActivity {
                                 });
                             }
                         };
+
                         //传回主线程
-                        handler.sendEmptyMessage(0x123);
+//                        handler.sendEmptyMessage(0x123);
                         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                             @Override
@@ -389,6 +660,7 @@ public class MovieContentActivity extends AppCompatActivity {
                         first_left_layout.setVisibility(View.VISIBLE);
                         wish.setText(o.wish_count + "人想看");
                         movie_type.setText(sb.toString());
+                        movieTitle = o.title;
                         title.setText(o.title);
                         tool_bar_movie_name.setText(o.title);
                         original_title.setText(o.original_title);
@@ -400,6 +672,8 @@ public class MovieContentActivity extends AppCompatActivity {
 
                         //第一排右侧的评分百分比的显示
                         calculateBaifenbi(o);
+                        //电影简介内容
+
                         summary.setText(o.summary);
                         getDirectorAndActor(o);
                         getPictures(o);
@@ -416,17 +690,36 @@ public class MovieContentActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: " + e);
-                        if (progress_bar_layout != null) {
-                            progress_bar_layout.setVisibility(View.GONE);
-                        }
+                        Calendar calendar = Calendar.getInstance();
+                        long time = calendar.getTime().getTime();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                        String formatTime = simpleDateFormat.format(time);
+                        MyUtils.putInSharedPreferences(activity, "errordata", formatTime, e.toString());
+                        loading_progress_try_again.setVisibility(View.VISIBLE);
+                        loading_progress_loading_anim.setVisibility(View.GONE);
+                        loading_progress_try_again.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loading_progress_try_again.setVisibility(View.GONE);
+                                loading_progress_loading_anim.setVisibility(View.VISIBLE);
+                                getDataFromNet(movieId);
+                            }
+                        });
                     }
 
                     @Override
                     public void onComplete() {
                         if (progress_bar_layout != null) {
                             progress_bar_layout.setVisibility(View.GONE);
+                            loading_progress_try_again.setVisibility(View.GONE);
                         }
                         Log.e(TAG, "onComplete: ");
+//                        handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                floating_action_button.hide();
+//                            }
+//                        }, 3000);
                     }
                 });
     }
@@ -462,7 +755,7 @@ public class MovieContentActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-
+                        buy_ticket_button.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -479,6 +772,7 @@ public class MovieContentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
                 Intent intent = new Intent(activity, AllCommentsActivity.class);
+                intent.putExtra("movieTitle", movieTitle);
                 intent.putExtra("movieId", movieId);
                 ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
             }
@@ -487,10 +781,10 @@ public class MovieContentActivity extends AppCompatActivity {
 
 
     //更多预告片,花絮视频
-    private void getTrailersClips(HotMovieContent o) {
+    private void getTrailersClips(final HotMovieContent o) {
         final ArrayList<HotMovieContent.Trailers> trailers = o.trailers;
-        ArrayList<HotMovieContent.Bloopers> bloopers = o.bloopers;
-        ArrayList<HotMovieContent.Clips> clips = o.clips;
+        final ArrayList<HotMovieContent.Bloopers> bloopers = o.bloopers;
+        final ArrayList<HotMovieContent.Clips> clips = o.clips;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycler_view_trailers_clips.setLayoutManager(linearLayoutManager);
@@ -501,6 +795,10 @@ public class MovieContentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MovieContentActivity.this);
                 Intent intent = new Intent(activity, ShowAllTrailersClips.class);
+                intent.putExtra("trailers", trailers);
+                intent.putExtra("bloopers", bloopers);
+                intent.putExtra("clips", clips);
+                intent.putExtra("movieTitle", movieTitle);
                 ActivityCompat.startActivity(MovieContentActivity.this, intent, optionsCompat.toBundle());
 //                startActivity(intent);
             }
@@ -512,8 +810,9 @@ public class MovieContentActivity extends AppCompatActivity {
         ArrayList<HotMovieContent.Photos> photos = o.photos;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        MyAdapter3 myAdapter3 = new MyAdapter3(photos);
         recycler_view_pictures.setLayoutManager(linearLayoutManager);
-        recycler_view_pictures.setAdapter(new MyAdapter3(photos));
+        recycler_view_pictures.setAdapter(myAdapter3);
         total_photos.setText("更多" + o.photos_count + "张剧照");
         total_photos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -522,6 +821,7 @@ public class MovieContentActivity extends AppCompatActivity {
                 Intent intent = new Intent(activity, ShowPhotosActivity.class);
                 intent.putExtra("movieId", movieId);
                 intent.putExtra("photo_count", o.photos_count);
+                intent.putExtra("movieTitle", movieTitle);
                 ActivityCompat.startActivity(MovieContentActivity.this, intent, optionsCompat.toBundle());
 //                startActivity(intent);
             }
@@ -531,12 +831,18 @@ public class MovieContentActivity extends AppCompatActivity {
 
     //获取导演和演员的数据并用横向的RecyclerView排列
     private void getDirectorAndActor(HotMovieContent o) {
+        //判断是否有导演的flag
+        boolean has_director = true;
         ArrayList<HotMovieContent.Casts> directors = o.directors;
         ArrayList<HotMovieContent.Casts> casts = o.casts;
         ArrayList<HotMovieContent.Casts> all = new ArrayList<>();
+        //没有导演就设置为false
+        if (directors.size() == 0) {
+            has_director = false;
+        }
         all.addAll(directors);
         all.addAll(casts);
-        MyAdapter2 myAdapter2 = new MyAdapter2(all);
+        MyAdapter2 myAdapter2 = new MyAdapter2(all, has_director);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         director_actor_recycler_view.setLayoutManager(layoutManager);
@@ -571,7 +877,7 @@ public class MovieContentActivity extends AppCompatActivity {
             TextView tv = new TextView(this);
             tv.setText(next + "星  ");
             linearLayout.addView(tv);
-            float num = ji / total * 500f;
+            float num = ji / total * 400f;
             float num2 = (float) (Math.round(ji / total * 100 * 10)) / 10;
             MyCustomView myCustomView = new MyCustomView(this, num);
             linearLayout.addView(myCustomView);
@@ -642,8 +948,10 @@ public class MovieContentActivity extends AppCompatActivity {
     //演职人员
     class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder> {
         ArrayList<HotMovieContent.Casts> o;
+        boolean hasDirector;
 
-        MyAdapter2(ArrayList<HotMovieContent.Casts> o) {
+        MyAdapter2(ArrayList<HotMovieContent.Casts> o, boolean hasDirector) {
+            this.hasDirector = hasDirector;
             this.o = o;
         }
 
@@ -657,15 +965,32 @@ public class MovieContentActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-            HotMovieContent.Casts c = o.get(i);
-            Glide.with(activity).load(c.avatars.small).into(myViewHolder.director_actor_image_view);
+            final HotMovieContent.Casts c = o.get(i);
+            ImageView director_actor_image_view = myViewHolder.director_actor_image_view;
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.mipmap.ic_launcher);
+            String castId = c.id;
+            if (c.avatars != null) {
+                Glide.with(activity).load(c.avatars.small).apply(requestOptions).into(director_actor_image_view);
+            }
             myViewHolder.name.setText(c.name);
             myViewHolder.name_en.setText(c.name_en);
-            if (i == 0) {
+            Log.e(TAG, "onBindViewHolder:" + c.name + " -- " + castId);
+            if ((i == 0) && hasDirector) {
                 myViewHolder.job.setText("导演");
             } else {
                 myViewHolder.job.setText("主演");
             }
+            director_actor_image_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG, "onClick: " + c.name);
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+                    Intent intent = new Intent(activity, PersonalInformationActivity.class);
+                    intent.putExtra("id", c.id);
+                    ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+                }
+            });
         }
 
         @Override
@@ -764,6 +1089,7 @@ public class MovieContentActivity extends AppCompatActivity {
                     ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
                     Intent intent = new Intent(activity, PLTextureViewBilibili.class);
                     intent.putExtra("path", path);
+                    intent.putExtra("movieTitle", movieTitle);
                     ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
                 }
             });
@@ -862,20 +1188,54 @@ public class MovieContentActivity extends AppCompatActivity {
             AllReviews.Review.Author author = review.author;
             AllReviews.Review.Rating rating = review.rating;
             String avatar = author.avatar;
-            String name = author.name;
+            final String name = author.name;
             String value = rating.value;
             String created_at = review.created_at;
             String title = review.title;
             String useful = review.useful_count;
             String useless = review.useless_count;
-
             String summary = review.summary;
+            final String reviewId = review.id;
             Glide.with(activity).load(avatar).into(myViewHolder6.popular_reviews_image_view);
             myViewHolder6.popular_reviews_name.setText(name);
             myViewHolder6.popular_reviews_rating_bar.setRating(Float.parseFloat(value));
             myViewHolder6.popular_reviews_created_at.setText(created_at);
             myViewHolder6.popular_reviews_title.setText(title);
-            myViewHolder6.popular_reviews_summary.setText(summary);
+            myViewHolder6.popular_reviews_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+                    Intent intent = new Intent(activity, SingleReviewActivity.class);
+                    //传入影评ID和评论者
+                    intent.putExtra("reviewId", reviewId);
+                    intent.putExtra("author_name", name);
+                    ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+                }
+            });
+            //富文本SpannableString
+            SpannableString more = new SpannableString(summary + "更多");
+            //可以点击的富文本
+            more.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity);
+                    Intent intent = new Intent(activity, SingleReviewActivity.class);
+                    //传入影评ID和评论者
+                    intent.putExtra("reviewId", reviewId);
+                    intent.putExtra("author_name", name);
+                    ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+                }
+
+                //设置更多属性，比如设置字体颜色
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                    ds.setColor(getResources().getColor(R.color.yellow));
+                }
+            }, more.length() - 2, more.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            myViewHolder6.popular_reviews_summary.setMovementMethod(LinkMovementMethod.getInstance());
+            myViewHolder6.popular_reviews_summary.setText(more);
             myViewHolder6.popular_reviews_useful.setText(useful);
             myViewHolder6.popular_reviews_useless.setText(useless);
         }
@@ -887,7 +1247,7 @@ public class MovieContentActivity extends AppCompatActivity {
 
         class MyViewHolder6 extends RecyclerView.ViewHolder {
             @BindView(R.id.popular_reviews_image_view)
-            ImageView popular_reviews_image_view;
+            CircleImageView popular_reviews_image_view;
             @BindView(R.id.popular_reviews_name)
             TextView popular_reviews_name;
             @BindView(R.id.popular_reviews_rating_bar)
@@ -911,6 +1271,7 @@ public class MovieContentActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBackPressed() {
         super.onBackPressed();

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+        android:text="简短评论:"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/complete_auto_text_view_left_right_padding_margin"
+        android:layout_marginTop="@dimen/complete_auto_text_view_top_bottom_padding_margin"
+        android:text="很好的电影，真实看的热泪盈眶啊"/>
+</LinearLayout>
